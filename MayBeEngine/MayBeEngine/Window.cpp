@@ -1,15 +1,17 @@
 ﻿#include "stdafx.h"
-#include "Display.h"
+#include "Window.h"
+#include <iostream>
+using namespace MayBe::Core;
 
 Window::Window(int width, int height)
-	: m_internalWindow(nullptr), m_windowID(-1), m_width(width), m_height(height), m_mouseFocus(true), m_keyboardFocus(true), m_fullScreen(false), m_minimized(false), m_shown(true)
+	: m_internalWindow(nullptr), m_windowId(-1), m_width(width), m_height(height), m_mouseFocus(true), m_keyboardFocus(true), m_fullScreen(false), m_minimized(false), m_shown(true)
 {}
 
 //Init window
 bool Window::Initialize()
 {
-	m_internalWindow = std::make_unique<GLFWwindow*>(glfwCreateWindow(m_width, m_height, "Test", nullptr, nullptr));
-	if(!m_internalWindow.get())
+	m_internalWindow = glfwCreateWindow(m_width, m_height, "Test", NULL, NULL);
+	if(m_internalWindow == nullptr)
 	{
 		glfwTerminate();
 		return false;
@@ -17,8 +19,9 @@ bool Window::Initialize()
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(GetInternalWindow());
-
+	std::cout << "test";
 	return true;
+	
 }
 
 void Window::Destroy()
@@ -37,14 +40,14 @@ int Window::GetHeight() const
 	return m_width;
 }
 
-int Window::GetWindowID() const
+int Window::GetWindowId() const
 {
-	return m_windowID;
+	return m_windowId;
 }
 
-GLFWwindow* Window::GetInternalWindow()
+GLFWwindow* Window::GetInternalWindow() const
 {
-	return *m_internalWindow.get();
+	return m_internalWindow;
 }
 
 bool Window::HasMouseFocus() const
